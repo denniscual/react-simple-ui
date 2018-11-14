@@ -1,28 +1,35 @@
-import React, { Component } from 'react';
-import logo from './logo.svg';
-import './App.css';
+// @flow
 
-class App extends Component {
-  render() {
-    return (
-      <div className="App">
-        <header className="App-header">
-          <img src={logo} className="App-logo" alt="logo" />
-          <p>
-            Edit <code>src/App.js</code> and save to reload.
-          </p>
-          <a
-            className="App-link"
-            href="https://reactjs.org"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Learn React
-          </a>
-        </header>
-      </div>
-    );
+import React, { useState } from 'react';
+
+// If we gonna create a named function, we gonna use function declaration syntax.
+// Then if we gonna create an anonymous function, go to flat arrow syntax.
+
+function Counter() {
+  const [ counter, setCounter ] = useState(0);
+
+  function handleDecrement() {
+    setCounter(prev => prev - 1);
   }
+
+  function handleIncrement() {
+    setCounter(prev => prev + 1);
+  };
+
+  return (
+    <div>
+      <button onClick={handleDecrement}>Decrement</button>
+      <div>{counter}</div>
+      <button onClick={handleIncrement}>Increment</button>
+    </div>
+  );
+}
+
+// TODO: Continue the learning...
+function App() {
+  return (
+    <Counter />
+  );
 }
 
 export default App;
