@@ -1,5 +1,4 @@
 // @flow
-
 import React, { useState } from 'react';
 
 // If we gonna create a named function, we gonna use function declaration syntax.
