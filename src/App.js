@@ -78,6 +78,7 @@ TabItem.defaultProps = {
 }
 
 // TODO: Need to accept some event handlers. This handlers gets invoke when there is changes in active Tab and there is selection.
+// TODO: Make this component more reusable and add some base styles.
 function Tabs(
   {
     children,
