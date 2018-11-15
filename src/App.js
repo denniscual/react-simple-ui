@@ -1,6 +1,16 @@
 // @flow
-import React, { useState } from 'react'
+import React, {
+  Children,
+  cloneElement,
+  isValidElement,
+  useState,
+  useCallback,
+  useMemo,
+  useEffect,
+  useRef,
+} from 'react'
 import type { ChildrenArray, Element } from 'react'
+import { update } from 'ramda'
 import styled from 'styled-components'
 
 // An application which caters the new features of React including hooks, memo, lazy, Suspense, and more...
@@ -19,47 +29,114 @@ import styled from 'styled-components'
 //   - need to show the active Tab item.
 //   - require some event handlers.
 
+// Helpers
+// It returns the previous version of a value.
+function usePrevious(value) {
+  const ref = useRef();
+  useEffect(() => {
+    ref.current = value;
+  });
+  return ref.current;
+}
+
 // Styles
-const SC_Tabs = styled.ul`
-  margin: 0;
-  display: flex;
-`
+// TODO: Try this new structure in defining Styled Components. In this way, we can
+// easily distinguish the Styled Components against Regular React Components.
+const sc = {
+  tabs: styled.ul`
+    margin: 0;
+  `,
+  tabsHeader: styled.header`
+  `,
+  tabItem: styled.li`
+    display: ${({ active }) => active ? 'block' : 'none'};
+    list-style-type: none;
+  `,
+}
 
-const SC_TabItem = styled.li`
-  list-style-type: none;
-`
-
-function TabItem({ children, title }: { children: Element<any> | any, title: string }) {
+const TabItem = function (
+  {
+    children,
+    title,
+    active,
+  }:
+  {
+    children: Element<any> | any,
+    title: string,
+    active: boolean,
+  }
+) {
   return (
-    <SC_TabItem>
-      <header>{ title }</header>
+    <sc.tabItem active={active}>
       <div>{ children }</div>
-    </SC_TabItem>
+    </sc.tabItem>
   )
 }
 
-function Tabs({ children }: { children: ChildrenArray<Element<typeof TabItem>>}): Element<'ul'> {
-  // We need loop to the children prop and extract the title prop of eact TabItem and use the titles
-  // for creating header of the Tabs.
+TabItem.defaultProps = {
+  active: false,
+}
+
+// TODO: Need to accept some event handlers. This handlers gets invoke when there is changes in active Tab and there is selection.
+function Tabs(
+  {
+    children,
+    activeIndex,
+  }: {
+    children: ChildrenArray<Element<typeof TabItem>>,
+    activeIndex: number,
+  }
+): Element<'ul'> {
+  const [ active, setActive ] = useState(activeIndex)
+  // create the tabsHeader. Note that the computation has been memoized. Means if no
+  // changes in children, it returns the cache value. No re-rendering happens.
+  const tabsHeader = useMemo(() => {
+    // create an array whose elements are the title prop of every child. Memoized the return value.
+    const tabItemHeaders = Children
+      .map(children, (child) => {
+        const isValid = isValidElement(child)
+        // If valid.
+        if (isValid) {
+          return child.props.title
+        }
+        // Else.
+        throw new TypeError('Value is not valid element.')
+      })
+      .map((title, i) => <button key={i} onClick={() => setActive(i)}>{ title }</button>)
+    return <sc.tabsHeader>{ tabItemHeaders }</sc.tabsHeader>
+  }, [ children ])
+  // Create body/content of the Tabs. Value has been memoized.
+  const tabsBody = useMemo(() => {
+    const updatedTabItemBasedInIndex = cloneElement(
+      Children.toArray(children)[active],
+      { active: true }
+    )
+    return <div>{ update(active, updatedTabItemBasedInIndex, children) }</div>
+  }, [ children, active ])
   return (
-    <SC_Tabs>
-      {/* TODO: The header should be displayed in here. E.g, The TabItem's title. */}
-      <header>Header define in here</header>
-      {/* TODO: The content should be displayed in here. */}
-      <div>Content should be displayed in here</div>
-    </SC_Tabs>
+    <sc.tabs>
+      { tabsHeader }
+      { tabsBody }
+    </sc.tabs>
   )
+}
+
+Tabs.defaultProps = {
+  activeIndex: 0,
 }
 
 function App() {
   return (
     // <Counter />
-    <Tabs>
+    <Tabs activeIndex={0}>
       <TabItem title="Tab 1">
-        This is the Tab 1
+        <div>This is the Tab 1</div>
       </TabItem>
       <TabItem title="Tab 2">
-        This is the Tab 2
+        <div>This is the Tab 2</div>
+      </TabItem>
+      <TabItem title="Tab 3">
+        <div>This is the Tab 3</div>
       </TabItem>
     </Tabs>
   );
