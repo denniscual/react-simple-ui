@@ -79,6 +79,7 @@ TabItem.defaultProps = {
 
 // TODO: Need to accept some event handlers. This handlers gets invoke when there is changes in active Tab and there is selection.
 // TODO: Make this component more reusable and add some base styles.
+// TODO: Add optional lazy load feature to the content of Tab items using lazy and Suspense API's.
 function Tabs(
   {
     children,
