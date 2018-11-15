@@ -54,7 +54,7 @@ const sc = {
   `,
 }
 
-const TabItem = function (
+function TabItem (
   {
     children,
     title,
@@ -65,7 +65,7 @@ const TabItem = function (
     title: string,
     active: boolean,
   }
-) {
+): Element<'li'> {
   return (
     <sc.tabItem active={active}>
       <div>{ children }</div>
