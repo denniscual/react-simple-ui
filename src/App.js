@@ -20,7 +20,6 @@ import styled from 'styled-components'
 // NOTE: If we gonna create a named function, we gonna use function declaration syntax.
 //       Then if we gonna create an anonymous function, go to flat arrow syntax.
 
-// TODO: Create another app which uses new features of React.
 // Create a Tabs Component.
 // Requirements in creating Tabs.
 //   - we need to have Tabs component (wrapper).
@@ -40,8 +39,6 @@ function usePrevious(value) {
 }
 
 // Styles
-// TODO: Try this new structure in defining Styled Components. In this way, we can
-// easily distinguish the Styled Components against Regular React Components.
 const sc = {
   tabs: styled.ul`
     margin: 0;
