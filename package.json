@@ -11,6 +11,13 @@
     "styled-components": "^4.1.1",
     "xstate": "^4.0.1"
   },
+  "devDependencies": {
+    "eslint-config-standard": "^12.0.0",
+    "eslint-plugin-react-hooks": "^0.0.0",
+    "husky": "^1.1.4",
+    "lint-staged": "^8.0.5",
+    "prettier": "^1.15.2"
+  },
   "scripts": {
     "preinstall": "npx use-yarn -m 'Please use yarn!'",
     "postinstall": "flow-typed install --ignoreDeps dev",
@@ -18,6 +25,17 @@
     "build": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject"
+  },
+  "husky": {
+    "hooks": {
+      "pre-commit": "lint-staged"
+    }
+  },
+  "lint-staged": {
+    "*.{js,json,css,md}": [
+      "prettier --write",
+      "git add"
+    ]
   },
   "eslintConfig": {
     "extends": "react-app"
@@ -28,12 +46,5 @@
     "not dead",
     "not ie <= 11",
     "not op_mini all"
-  ],
-  "devDependencies": {
-    "eslint-config-standard": "^12.0.0",
-    "eslint-plugin-react-hooks": "^0.0.0",
-    "husky": "^1.1.4",
-    "lint-staged": "^8.0.5",
-    "prettier": "^1.15.2"
-  }
+  ]
 }

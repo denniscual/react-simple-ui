@@ -16,7 +16,6 @@ import styled from 'styled-components'
 // An application which caters the new features of React including hooks, memo, lazy, Suspense, and more...
 
 // TODO: Add styles to our case study for React hooks.
-// TODO: Add linting. Either eslint or standardjs.
 // NOTE: If we gonna create a named function, we gonna use function declaration syntax.
 //       Then if we gonna create an anonymous function, go to flat arrow syntax.
 
