@@ -33,16 +33,13 @@
   },
   "lint-staged": {
     "linters": {
-      "*.{js}": [
+      "*.{js,jsx,ts}": [
+        "flow focus-check",
         "eslint --fix",
-        "flow focus-check"
-      ],
-      "*.{js,css,sass,scss,less,json,md}": [
         "prettier --write",
         "git add"
       ]
     },
-    "concurrent": false,
     "ignore": [
       "**/flow-typed/npm/*.js"
     ]
