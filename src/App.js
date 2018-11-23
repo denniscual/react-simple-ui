@@ -84,6 +84,7 @@ type TabItemProps = {
 }
 
 function TabItem({ children, title, active }: TabItemProps): Element<'li'> {
+  console.log('TabItem ', title)
   return (
     <SC.tabItem active={active}>
       <div>{children}</div>
@@ -109,6 +110,9 @@ function Tabs({
 }): Element<'ul'> {
   const [active, setActive] = useActive(activeIndex, onTabChange)
 
+  // TODO: We need to search why the TabItems are not re-created when the active state is changed. Instead, it fires re-rendering.
+  // Basically what we are anticipating is to re-create the items not re-render. So we gonna search about this magic optimazion.
+  // We missed this behaviour of react.
   const updatedChildren = useMemo(
     () => {
       const childrenToArr = Children.toArray(children)
@@ -150,10 +154,12 @@ function Tabs({
     },
     [updatedChildren],
   )
+
   // Create body/content of the Tabs. Value has been memoized.
   const tabsBody = useMemo(() => <div>{updatedChildren}</div>, [
     updatedChildren,
   ])
+
   return (
     <SC.tabs>
       {tabsHeader}
@@ -173,7 +179,7 @@ function App() {
   }
   return (
     // <Counter />
-    <Tabs activeIndex={1} onTabChange={onTabChange}>
+    <Tabs activeIndex={0} onTabChange={onTabChange}>
       <TabItem title="Tab 1">
         <div>This is the Tab 1</div>
       </TabItem>
