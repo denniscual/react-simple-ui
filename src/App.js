@@ -3,10 +3,13 @@ import React, {
   Children,
   cloneElement,
   isValidElement,
+  // $FlowFixMe
   useState,
-  useCallback,
+  // $FlowFixMe
   useMemo,
+  // $FlowFixMe
   useEffect,
+  // $FlowFixMe
   useRef,
 } from 'react'
 import type { ChildrenArray, Element } from 'react'
@@ -38,7 +41,7 @@ function usePrevious(value) {
 }
 
 // Styles
-const sc = {
+const SC = {
   tabs: styled.ul`
     margin: 0;
   `,
@@ -59,9 +62,9 @@ function TabItem({
   active: boolean,
 }): Element<'li'> {
   return (
-    <sc.tabItem active={active}>
+    <SC.tabItem active={active}>
       <div>{children}</div>
-    </sc.tabItem>
+    </SC.tabItem>
   )
 }
 
@@ -70,8 +73,8 @@ TabItem.defaultProps = {
 }
 
 // TODO: Need to accept some event handlers. This handlers gets invoke when there is changes in active Tab and there is selection.
-// TODO: Make this component more reusable and add some base styles.
 // TODO: Add optional lazy load feature to the content of Tab items using lazy and Suspense API's.
+// TODO: Make this component more reusable and add some base styles.
 function Tabs({
   children,
   activeIndex,
@@ -103,26 +106,28 @@ function Tabs({
           {title}
         </button>
       ))
-      return <sc.tabsHeader>{tabItemHeaders}</sc.tabsHeader>
+      return <SC.tabsHeader>{tabItemHeaders}</SC.tabsHeader>
     },
     [children],
   )
   // Create body/content of the Tabs. Value has been memoized.
   const tabsBody = useMemo(
     () => {
-      const updatedTabItemBasedInIndex = cloneElement(
-        Children.toArray(children)[active],
-        { active: true },
+      const childrenToArr = Children.toArray(children)
+      const updatedTabItemBasedInIndex = cloneElement(childrenToArr[active], {
+        active: true,
+      })
+      return (
+        <div>{update(active, updatedTabItemBasedInIndex, childrenToArr)}</div>
       )
-      return <div>{update(active, updatedTabItemBasedInIndex, children)}</div>
     },
     [children, active],
   )
   return (
-    <sc.tabs>
+    <SC.tabs>
       {tabsHeader}
       {tabsBody}
-    </sc.tabs>
+    </SC.tabs>
   )
 }
 
@@ -142,6 +147,9 @@ function App() {
       </TabItem>
       <TabItem title="Tab 3">
         <div>This is the Tab 3</div>
+      </TabItem>
+      <TabItem title="Tab 4">
+        <div>Another wonderful tabs</div>
       </TabItem>
     </Tabs>
   )

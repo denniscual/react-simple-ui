@@ -32,9 +32,19 @@
     }
   },
   "lint-staged": {
-    "*.{js,json,css,md}": [
-      "prettier --write",
-      "git add"
+    "linters": {
+      "*.{js}": [
+        "eslint --fix",
+        "flow focus-check"
+      ],
+      "*.{js,css,sass,scss,less,json,md}": [
+        "prettier --write",
+        "git add"
+      ]
+    },
+    "concurrent": false,
+    "ignore": [
+      "**/flow-typed/npm/*.js"
     ]
   },
   "eslintConfig": {
