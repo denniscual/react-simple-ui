@@ -138,7 +138,7 @@ Tabs.defaultProps = {
 function App() {
   return (
     // <Counter />
-    <Tabs activeIndex={0}>
+    <Tabs activeIndex={true}>
       <TabItem title="Tab 1">
         <div>This is the Tab 1</div>
       </TabItem>
