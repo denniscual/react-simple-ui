@@ -4,6 +4,10 @@ import React, {
   cloneElement,
   isValidElement,
   // $FlowFixMe
+  Suspense,
+  // $FlowFixMe
+  lazy,
+  // $FlowFixMe
   useState,
   // $FlowFixMe
   useMemo,
@@ -11,8 +15,6 @@ import React, {
   useEffect,
   // $FlowFixMe
   useRef,
-  // $FlowFixMe
-  useMutationEffect,
 } from 'react'
 import type { ChildrenArray, Element } from 'react'
 import { update } from 'ramda'
@@ -27,7 +29,7 @@ const SC = {
   tabItem: styled.li`
     display: ${({ active }) => (active ? 'block' : 'none')};
     list-style-type: none;
-  `,
+  w`,
 }
 
 // An application which caters the new features of React including hooks, memo, lazy, Suspense, and more...
@@ -84,10 +86,9 @@ type TabItemProps = {
 }
 
 function TabItem({ children, title, active }: TabItemProps): Element<'li'> {
-  console.log('TabItem ', title)
   return (
     <SC.tabItem active={active}>
-      <div>{children}</div>
+      <div>{active && children}</div>
     </SC.tabItem>
   )
 }
@@ -96,8 +97,6 @@ TabItem.defaultProps = {
   active: false,
 }
 
-// TODO: Need to accept some event handlers. This handlers gets invoke when there is changes in active Tab and there is selection.
-// TODO: Add optional lazy load feature to the content of Tab items using lazy and Suspense API's.
 // TODO: Make this component more reusable and add some base styles.
 function Tabs({
   children,
@@ -173,26 +172,45 @@ Tabs.defaultProps = {
   onTabChange: () => {},
 }
 
+// TODO: We need to investigate why code-splitting is not working here.
+const Item1 = lazy(() => import('./Item1'))
+const Item2 = lazy(() => import('./Item2'))
+
+function LikeTabs({ children }) {
+  const [isShow, setShow] = useState(false)
+  function handleClick() {
+    setShow(!isShow)
+  }
+  return (
+    <div>
+      <button onClick={handleClick}>Show</button>
+      <div>{isShow && children}</div>
+    </div>
+  )
+}
+
 function App() {
   function onTabChange() {
     console.log('on tab change')
   }
   return (
     // <Counter />
-    <Tabs activeIndex={0} onTabChange={onTabChange}>
-      <TabItem title="Tab 1">
-        <div>This is the Tab 1</div>
-      </TabItem>
-      <TabItem title="Tab 2">
-        <div>This is the Tab 2</div>
-      </TabItem>
-      <TabItem title="Tab 3">
-        <div>This is the Tab 3</div>
-      </TabItem>
-      <TabItem title="Tab 4">
-        <div>Another wonderful tabs</div>
-      </TabItem>
-    </Tabs>
+    <Suspense fallback={<div>Loading...</div>}>
+      <LikeTabs>
+        <Item1 />
+      </LikeTabs>
+      <LikeTabs>
+        <Item2 />
+      </LikeTabs>
+      {/* <Tabs activeIndex={0} onTabChange={onTabChange}>
+          <TabItem title="Tab 1">
+          <Item1 />
+          </TabItem>
+          <TabItem title="Tab 2">
+          <Item2 />
+          </TabItem>
+          </Tabs> */}
+    </Suspense>
   )
 }
 
