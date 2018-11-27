@@ -108,7 +108,6 @@ function Tabs({
   onTabChange: () => void,
 }): Element<'ul'> {
   const [active, setActive] = useActive(activeIndex, onTabChange)
-
   // TODO: We need to search why the TabItems are not re-created when the active state is changed. Instead, it fires re-rendering.
   // Basically what we are anticipating is to re-create the items not re-render. So we gonna search about this magic optimazion.
   // We missed this behaviour of react.
@@ -122,7 +121,6 @@ function Tabs({
     },
     [children, active],
   )
-
   // create the tabsHeader. Note that the computation has been memoized. Means if no
   // changes in children, it returns the cache value. No re-rendering happens.
   const tabsHeader = useMemo(
@@ -144,7 +142,12 @@ function Tabs({
         props.active ? (
           <span key={i}>{props.title}</span>
         ) : (
-          <button key={i} onClick={() => setActive(i)}>
+          <button
+            key={i}
+            onClick={() => {
+              setActive(i)
+            }}
+          >
             {props.title}
           </button>
         ),
@@ -172,23 +175,6 @@ Tabs.defaultProps = {
   onTabChange: () => {},
 }
 
-// TODO: We need to investigate why code-splitting is not working here.
-const Item1 = lazy(() => import('./Item1'))
-const Item2 = lazy(() => import('./Item2'))
-
-function LikeTabs({ children }) {
-  const [isShow, setShow] = useState(false)
-  function handleClick() {
-    setShow(!isShow)
-  }
-  return (
-    <div>
-      <button onClick={handleClick}>Show</button>
-      <div>{isShow && children}</div>
-    </div>
-  )
-}
-
 function App() {
   function onTabChange() {
     console.log('on tab change')
@@ -196,20 +182,10 @@ function App() {
   return (
     // <Counter />
     <Suspense fallback={<div>Loading...</div>}>
-      <LikeTabs>
-        <Item1 />
-      </LikeTabs>
-      <LikeTabs>
-        <Item2 />
-      </LikeTabs>
-      {/* <Tabs activeIndex={0} onTabChange={onTabChange}>
-          <TabItem title="Tab 1">
-          <Item1 />
-          </TabItem>
-          <TabItem title="Tab 2">
-          <Item2 />
-          </TabItem>
-          </Tabs> */}
+      <Tabs activeIndex={0} onTabChange={onTabChange}>
+        <TabItem title="Tab 1">Tab Item 1</TabItem>
+        <TabItem title="Tab 2">Tab Item 2</TabItem>
+      </Tabs>
     </Suspense>
   )
 }
