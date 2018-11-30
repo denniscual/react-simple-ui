@@ -7,6 +7,10 @@ import React, {
   // $FlowFixMe
   Suspense,
   // $FlowFixMe
+  useState,
+  // $FlowFixMe
+  useEffect,
+  // $FlowFixMe
   useMemo,
 } from 'react'
 import type { ChildrenArray, Element } from 'react'
@@ -89,6 +93,8 @@ Carousel.defaultProps = {
   activeIndex: 0,
 }
 
+// TODO: We need to add styles and animation for our Carousel including indicators.
+// TODO: Add controls like indicators to go to the next pane, go to previous pane and play/pause that auto-switching.
 function Carousel({
   activeIndex,
   children,
@@ -96,15 +102,43 @@ function Carousel({
   children: ChildrenArray<Element<typeof CarouselPane>>,
   activeIndex: number,
 }) {
+  const [isPlaying, setPlaying] = useState(true)
+  // TODO: I think it is good to encapsulates/group this 2 next statements into 1 hook because they change together.
   const [active, setActive] = useActive(activeIndex)
   const updatedChildren = useUpdateChildrenByActiveIndex(children, active)
-  // TODO: We need to add styles and animation for our Carousel including indicators.
+  useEffect(
+    () => {
+      let timeout: any = 0
+      // We will have a schedule in updating the active state if only the isPlaying flag is true.
+      if (isPlaying) {
+        // When this Component gets mounted, schedule to update the active state so that it switch to next pane.
+        timeout = setTimeout(() => {
+          // Result of increment of active by 1.
+          const incrementActive = active + 1
+          // Get the last element index of updatedChildren []
+          const lastElementIndex = updatedChildren.length - 1
+          // If incrementActive is greater than the lastElementIndex then active should be assigned to 0 to go back in to first panel. Else, keep going.
+          const resultActive =
+            incrementActive > lastElementIndex ? 0 : incrementActive
+          setActive(resultActive)
+        }, 2000)
+      }
+      // When the active state is updated via clicking the indicators or using some controls, we need to stop the schedule of updating the state.
+      return function cleanup() {
+        clearTimeout(timeout)
+      }
+    },
+    [active, isPlaying],
+  )
   return (
     <Fragment>
       <RootSC.list>{updatedChildren}</RootSC.list>
       <CarouselIndicators setActive={setActive}>
         {updatedChildren}
       </CarouselIndicators>
+      <button onClick={() => setPlaying(isPlaying => !isPlaying)}>
+        Pause/Play
+      </button>
     </Fragment>
   )
 }
