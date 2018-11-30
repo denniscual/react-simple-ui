@@ -1,44 +1,22 @@
 // @flow
 import React, {
   Children,
-  cloneElement,
   isValidElement,
-  // $FlowFixMe
-  useState,
   // $FlowFixMe
   useMemo,
 } from 'react'
 import type { ChildrenArray, Element } from 'react'
-import { update } from 'ramda'
 import styled from 'styled-components'
-import { useDidUpdateEffect } from './hooks'
+import { useActive, useUpdateChildrenByActiveIndex } from './hooks'
+import RootSC from './styles'
 
 // Styles
 const SC = {
-  tabs: styled.ul`
-    margin: 0;
-    padding-left: 0;
-  `,
+  tabs: styled(RootSC.list)``,
   tabsHeader: styled.header``,
-  tabItem: styled.li`
+  tabItem: styled(RootSC.listItem)`
     display: ${({ active }) => (active ? 'block' : 'none')};
-    list-style-type: none;
-    w`,
-}
-
-function useActive(activeIndex: number, callback?: Function) {
-  const [active, setActive] = useState(activeIndex)
-  // Callback will only run in re-rendering.
-  useDidUpdateEffect(
-    () => {
-      // Handle if callback is defined. Invoke it in mount and every update.
-      if (callback) {
-        callback()
-      }
-    },
-    [active],
-  )
-  return [active, setActive]
+  `,
 }
 
 type TabItemProps = {
@@ -79,16 +57,9 @@ function Tabs({
   onTabChange,
 }: TabsProps): Element<'ul'> {
   const [active, setActive] = useActive(activeIndex, onTabChange)
-  const updatedChildren = useMemo(
-    () => {
-      const childrenToArr = Children.toArray(children)
-      const updatedTabItemBasedInIndex = cloneElement(childrenToArr[active], {
-        active: true,
-      })
-      return update(active, updatedTabItemBasedInIndex, childrenToArr)
-    },
-    [children, active],
-  )
+
+  const updatedChildren = useUpdateChildrenByActiveIndex(children, active)
+
   // create the tabsHeader. Note that the computation has been memoized. Means if no
   // changes in children, it returns the cache value. No re-rendering happens.
   const tabsHeader = useMemo(
