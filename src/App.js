@@ -8,6 +8,7 @@ import type { ChildrenArray, Element } from 'react'
 import styled from 'styled-components'
 import Counter from './Counter'
 import Tabs, { TabItem } from './Tabs'
+import { useActive, useUpdateChildrenByActiveIndex } from './hooks'
 import RootSC from './styles'
 
 const SC = {
@@ -35,11 +36,21 @@ function CarouselPane({
   return <RootSC.listItem>{children}</RootSC.listItem>
 }
 
+Carousel.defaultProps = {
+  activeIndex: 0,
+}
+
+// TODO: Try to create a hook which abstract the generic logic of creating tabs and carousel. Use the custom hooks which just defined.
 function Carousel({
+  activeIndex,
   children,
 }: {
   children: ChildrenArray<Element<typeof CarouselPane>>,
+  activeIndex: number,
 }) {
+  const [active, setActive] = useActive(activeIndex)
+
+  const updatedChildren = useUpdateChildrenByActiveIndex(children, active)
   return <RootSC.list>{children}</RootSC.list>
 }
 
