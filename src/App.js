@@ -75,6 +75,19 @@ function CarouselIndicators({
   return carouselIndicators
 }
 
+// Controls for carousel. E.g, ability to play or pause the auto-switching.
+// TODO: Add previous and next buttons to navigate to different panes.
+function CarouselControls({ setPlaying }: { setPlaying: Function }) {
+  // TODO: Click handler should be cached. Use `useCallback` hook.
+  return (
+    <div>
+      <button onClick={() => setPlaying(isPlaying => !isPlaying)}>
+        Pause/Play
+      </button>
+    </div>
+  )
+}
+
 CarouselPane.defaultProps = {
   active: false,
 }
@@ -102,6 +115,7 @@ function Carousel({
   children: ChildrenArray<Element<typeof CarouselPane>>,
   activeIndex: number,
 }) {
+  // State to define Carousel controls.
   const [isPlaying, setPlaying] = useState(true)
   // TODO: I think it is good to encapsulates/group this 2 next statements into 1 hook because they change together.
   const [active, setActive] = useActive(activeIndex)
@@ -133,12 +147,10 @@ function Carousel({
   return (
     <Fragment>
       <RootSC.list>{updatedChildren}</RootSC.list>
+      <CarouselControls setPlaying={setPlaying} />
       <CarouselIndicators setActive={setActive}>
         {updatedChildren}
       </CarouselIndicators>
-      <button onClick={() => setPlaying(isPlaying => !isPlaying)}>
-        Pause/Play
-      </button>
     </Fragment>
   )
 }
