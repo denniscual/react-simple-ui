@@ -53,17 +53,27 @@ function useActive(activeIndex: number, callback?: Function) {
 // Update children by given active index.
 function useUpdateChildrenByActiveIndex(
   children: ChildrenArray<Element<any>>,
-  active: number,
+  activeIndex: number,
 ) {
   return useMemo(
     () => {
       const childrenToArr = Children.toArray(children)
-      const updatedTabItemBasedInIndex = cloneElement(childrenToArr[active], {
+      const lastElementIndex = childrenToArr.length - 1
+      // If the activeIndex is greater than or equal to the lastElementIndex of children, then we gonna return the last element of children.
+      // If the activeIndex is less than 0 then return the first element of the children. Else, return the element based in
+      // activeIndex.
+      const child =
+        activeIndex >= lastElementIndex
+          ? childrenToArr[lastElementIndex]
+          : activeIndex < 0
+          ? childrenToArr[0]
+          : childrenToArr[activeIndex]
+      const updatedTabItemBasedInIndex = cloneElement(child, {
         active: true,
       })
-      return update(active, updatedTabItemBasedInIndex, childrenToArr)
+      return update(activeIndex, updatedTabItemBasedInIndex, childrenToArr)
     },
-    [children, active],
+    [children, activeIndex],
   )
 }
 

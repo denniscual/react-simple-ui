@@ -19,6 +19,7 @@ const SC = {
   `,
 }
 
+// -------------------------- TabItem --------------------------//
 type TabItemProps = {
   children: Element<any> | any,
   title: string,
@@ -36,6 +37,8 @@ function TabItem({ children, title, active }: TabItemProps): Element<'li'> {
     </SC.tabItem>
   )
 }
+
+// -------------------------- Tabs --------------------------//
 
 type TabsProps = {
   children: ChildrenArray<Element<typeof TabItem>>,

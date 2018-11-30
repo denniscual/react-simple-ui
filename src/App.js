@@ -37,10 +37,10 @@ function CarouselPane({
 }
 
 Carousel.defaultProps = {
-  activeIndex: 0,
+  activeIndex: 5,
 }
 
-// TODO: Try to create a hook which abstract the generic logic of creating tabs and carousel. Use the custom hooks which just defined.
+// TODO: Try to create a hook which abstract the generic logic of creating tabs and carousel. Use the custom hooks which we just defined.
 function Carousel({
   activeIndex,
   children,
@@ -49,9 +49,8 @@ function Carousel({
   activeIndex: number,
 }) {
   const [active, setActive] = useActive(activeIndex)
-
   const updatedChildren = useUpdateChildrenByActiveIndex(children, active)
-  return <RootSC.list>{children}</RootSC.list>
+  return <RootSC.list>{updatedChildren}</RootSC.list>
 }
 
 function App() {
