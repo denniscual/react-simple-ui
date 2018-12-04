@@ -10270,10 +10270,10 @@ xregexp@4.0.0:
   resolved "https://registry.yarnpkg.com/xregexp/-/xregexp-4.0.0.tgz#e698189de49dd2a18cc5687b05e17c8e43943020"
   integrity sha512-PHyM+sQouu7xspQQwELlGwwd05mXUFqwFYfqPO0cC7x4fxyHnnuetmQr6CjJiafIDoH4MogHb9dOoJzR/Y4rFg==
 
-xstate@^4.0.1:
-  version "4.0.1"
-  resolved "https://registry.yarnpkg.com/xstate/-/xstate-4.0.1.tgz#a9d415280605ccc8c5b9442a87511eeb1d34eee3"
-  integrity sha512-NYC4iCj+i2I3yA7qvFk7SMOEfzqUmoBo2imHyZL4OJtTZojy8P60zbWgVL0+8GjoaqCnyNilUUjmT0RFqcPXIg==
+xstate@^4.2.0:
+  version "4.2.0"
+  resolved "https://registry.yarnpkg.com/xstate/-/xstate-4.2.0.tgz#38dfdbb17d6de21b49c2db8fd598cdd2103833f0"
+  integrity sha512-ORql7DCE02rLsdSlzj8GsW39BXF1Z1AWcKWy2eNHc8TCBoOc7SfYYBRPKZBdw2x3SW9tIYQQi6WBB8b/Jj6Lmw==
 
 xtend@^4.0.0, xtend@~4.0.1:
   version "4.0.1"

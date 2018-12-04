@@ -9,10 +9,13 @@ import Tabs, { TabItem } from './Tabs'
 import Carousel, { CarouselPane } from './Carousel'
 import RootSC from './styles'
 
+// TODO: Create a state management library which is built on top of xstate and React hooks.
+// TODO: Instead of using xstate to provide the statechart, what we gonna do is to create our own statechart based in hooks and xstate.
+
 function App() {
   return (
     <Suspense fallback={<div>Loading...</div>}>
-      <RootSC.section>
+      <RootSC.section isHide>
         <h3>Carousel</h3>
         <Carousel>
           <CarouselPane>
