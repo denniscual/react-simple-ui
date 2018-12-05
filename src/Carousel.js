@@ -66,15 +66,16 @@ function CarouselIndicators({
   return carouselIndicators
 }
 
-// Controls for carousel. E.g, ability to play or pause the auto-switching.
 // TODO: Add previous and next buttons to navigate to different panes.
 function CarouselControls({ setPlaying }: { setPlaying: Function }) {
   // TODO: Click handler should be cached. Use `useCallback` hook.
   return (
     <div>
+      <button>Previous</button>
       <button onClick={() => setPlaying(isPlaying => !isPlaying)}>
         Pause/Play
       </button>
+      <button>Next</button>
     </div>
   )
 }
@@ -99,8 +100,6 @@ Carousel.defaultProps = {
   switchTimeout: 2000,
 }
 
-// TODO: We need to add styles and animation for our Carousel including indicators.
-// TODO: Add controls like indicators to go to the next pane, go to previous pane and play/pause that auto-switching.
 function Carousel({
   children, // The carousel panes.
   activeIndex, // User can choose what active pane should be displayed.
@@ -143,8 +142,8 @@ function Carousel({
   )
   return (
     <Fragment>
-      <RootSC.list>{updatedChildren}</RootSC.list>
       <CarouselControls setPlaying={setPlaying} />
+      <RootSC.list>{updatedChildren}</RootSC.list>
       <CarouselIndicators setActive={setActive}>
         {updatedChildren}
       </CarouselIndicators>
