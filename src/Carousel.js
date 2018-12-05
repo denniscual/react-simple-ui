@@ -66,16 +66,23 @@ function CarouselIndicators({
   return carouselIndicators
 }
 
-// TODO: Add previous and next buttons to navigate to different panes.
-function CarouselControls({ setPlaying }: { setPlaying: Function }) {
-  // TODO: Click handler should be cached. Use `useCallback` hook.
+function CarouselControls({
+  setPlaying,
+  setActive,
+}: {
+  setPlaying: Function,
+  setActive: Function,
+}) {
+  // TODO: Add definition for this navigator updaters.
+  function prevUpdater(activeIndex: number) {}
+  function nextUpdater(activeIndex: number) {}
   return (
     <div>
-      <button>Previous</button>
+      <button onClick={() => setActive(prevUpdater)}>Previous</button>
       <button onClick={() => setPlaying(isPlaying => !isPlaying)}>
         Pause/Play
       </button>
-      <button>Next</button>
+      <button onClick={() => setActive(nextUpdater)}>Next</button>
     </div>
   )
 }
@@ -142,7 +149,7 @@ function Carousel({
   )
   return (
     <Fragment>
-      <CarouselControls setPlaying={setPlaying} />
+      <CarouselControls setPlaying={setPlaying} setActive={setActive} />
       <RootSC.list>{updatedChildren}</RootSC.list>
       <CarouselIndicators setActive={setActive}>
         {updatedChildren}
