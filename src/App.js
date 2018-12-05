@@ -15,9 +15,9 @@ import RootSC from './styles'
 function App() {
   return (
     <Suspense fallback={<div>Loading...</div>}>
-      <RootSC.section isHide>
+      <RootSC.section>
         <h3>Carousel</h3>
-        <Carousel>
+        <Carousel switchTimeout={2000}>
           <CarouselPane>
             <div>Pane 1</div>
           </CarouselPane>

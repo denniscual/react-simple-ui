@@ -95,19 +95,25 @@ function CarouselPane({
 
 Carousel.defaultProps = {
   activeIndex: 0,
+  autoSwitch: true,
+  switchTimeout: 2000,
 }
 
 // TODO: We need to add styles and animation for our Carousel including indicators.
 // TODO: Add controls like indicators to go to the next pane, go to previous pane and play/pause that auto-switching.
 function Carousel({
-  activeIndex,
-  children,
+  children, // The carousel panes.
+  activeIndex, // User can choose what active pane should be displayed.
+  autoSwitch, // Option to user for auto switch mode.
+  switchTimeout, // The timeout used in auto switch mode.
 }: {
   children: ChildrenArray<Element<typeof CarouselPane>>,
   activeIndex: number,
+  autoSwitch: boolean,
+  switchTimeout: number,
 }) {
   // State to define Carousel controls.
-  const [isPlaying, setPlaying] = useState(true)
+  const [isPlaying, setPlaying] = useState(autoSwitch)
   // TODO: I think it is good to encapsulates/group this 2 next statements into 1 hook because they change together.
   const [active, setActive] = useActive(activeIndex)
   const updatedChildren = useUpdateChildrenByActiveIndex(children, active)
@@ -126,7 +132,7 @@ function Carousel({
           const resultActive =
             incrementActive > lastElementIndex ? 0 : incrementActive
           setActive(resultActive)
-        }, 2000)
+        }, switchTimeout)
       }
       // When the active state is updated via clicking the indicators or using some controls, we need to stop the schedule of updating the state.
       return function cleanup() {
