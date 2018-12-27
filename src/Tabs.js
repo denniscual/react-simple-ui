@@ -59,9 +59,9 @@ function Tabs({
   activeIndex,
   onTabChange,
 }: TabsProps): Element<'ul'> {
-  const [active, setActive] = useActive(activeIndex, onTabChange)
+  const [currentActive, setActive] = useActive(activeIndex, onTabChange)
 
-  const updatedChildren = useUpdateChildrenByActiveIndex(children, active)
+  const panes = useUpdateChildrenByActiveIndex(children, currentActive)
 
   // create the tabsHeader. Note that the computation has been memoized. Means if no
   // changes in children, it returns the cache value. No re-rendering happens.
@@ -69,7 +69,7 @@ function Tabs({
     () => {
       // create an array whose elements are the title prop of every child. Memoized the return value.
       const tabItemHeaders = Children.map(
-        updatedChildren,
+        panes,
         (child): { title: string, active: boolean } => {
           const isValid = isValidElement(child)
           // If valid.
@@ -96,13 +96,11 @@ function Tabs({
       )
       return <SC.tabsHeader>{tabItemHeaders}</SC.tabsHeader>
     },
-    [updatedChildren],
+    [panes],
   )
 
   // Create body/content of the Tabs. Value has been memoized.
-  const tabsBody = useMemo(() => <div>{updatedChildren}</div>, [
-    updatedChildren,
-  ])
+  const tabsBody = useMemo(() => <div>{panes}</div>, [panes])
 
   return (
     <SC.tabs>

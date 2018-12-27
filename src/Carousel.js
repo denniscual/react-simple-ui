@@ -81,7 +81,6 @@ function CarouselControls({
   setPlaying: Function,
   setActive: Function,
 }) {
-  // TODO: Add definition for this navigator updaters.
   // If previous button will be invoked, we gonna decrement the value from 1. If the result will become negative, then we gonna set the currentActive number into last element index number.
   function prevClick() {
     const newActive = (currentActive - 1 + slidesLength) % slidesLength

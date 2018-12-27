@@ -34,7 +34,7 @@ function App() {
         <h3>Counter</h3>
         <Counter />
       </RootSC.section>
-      <RootSC.section isHide>
+      <RootSC.section>
         <h3>Tabs</h3>
         <Tabs activeIndex={0}>
           <TabItem title="Tab 1">Tab Item 1</TabItem>
