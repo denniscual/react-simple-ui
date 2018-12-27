@@ -7,7 +7,7 @@ import React, {
 } from 'react'
 import type { ChildrenArray, Element } from 'react'
 import styled from 'styled-components'
-import { useActive, useUpdateChildrenByActiveIndex } from './hooks'
+import { useUpdateChildren } from './hooks'
 import RootSC from './styles'
 
 // Styles
@@ -59,10 +59,10 @@ function Tabs({
   activeIndex,
   onTabChange,
 }: TabsProps): Element<'ul'> {
-  const [currentActive, setActive] = useActive(activeIndex, onTabChange)
-
-  const panes = useUpdateChildrenByActiveIndex(children, currentActive)
-
+  const [panes, { setActive }] = useUpdateChildren(
+    { activeIndex, children },
+    onTabChange,
+  )
   // create the tabsHeader. Note that the computation has been memoized. Means if no
   // changes in children, it returns the cache value. No re-rendering happens.
   const tabsHeader = useMemo(

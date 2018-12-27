@@ -12,7 +12,7 @@ import React, {
 } from 'react'
 import type { ChildrenArray, Element } from 'react'
 import styled from 'styled-components'
-import { useActive, useUpdateChildrenByActiveIndex } from './hooks'
+import { useUpdateChildren } from './hooks'
 import RootSC from './styles'
 
 const SC = {
@@ -138,13 +138,14 @@ function Carousel({
   autoSwitch: boolean,
   switchTimeout: number,
 }) {
-  // State to define Carousel controls.
-  const [isPlaying, setPlaying] = useState(autoSwitch)
-  // TODO: I think it is good to encapsulates/group this 2 next statements into 1 hook because they change together.
-  const [currentActive, setActive] = useActive(activeIndex)
-  const slides = useUpdateChildrenByActiveIndex(children, currentActive)
   // count/length of children
   const slidesLength = Children.count(children)
+  // State to define Carousel controls.
+  const [isPlaying, setPlaying] = useState(autoSwitch)
+  const [slides, { currentActive, setActive }] = useUpdateChildren({
+    activeIndex,
+    children,
+  })
   useEffect(
     () => {
       let timeout: any = 0

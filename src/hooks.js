@@ -24,7 +24,7 @@ function usePrevious(value: any) {
   return ref.current
 }
 
-// The callback will only invoke in effect during re-rendering. It defers
+// The cb will only invoke in effect during re-rendering. It defers
 // the invocation in initial render (didMount)
 function useDidUpdateEffect(fn: Function, inputs: Array<any>) {
   const didMountRef = useRef(false)
@@ -34,15 +34,15 @@ function useDidUpdateEffect(fn: Function, inputs: Array<any>) {
   }, inputs)
 }
 
-// Hooks defining an active state and returning an updater. It also accepts a callback which only execute in componentDidUpdate method.
-function useActive(activeIndex: number, callback?: Function) {
+// Hooks defining an active state and returning an updater. It also accepts a cb which only execute in componentDidUpdate method.
+function useActive(activeIndex: number, cb?: Function) {
   const [active, setActive] = useState(activeIndex)
   // Callback will only run in re-rendering.
   useDidUpdateEffect(
     () => {
-      // Handle if callback is defined. Invoke it in mount and every update.
-      if (callback) {
-        callback()
+      // Handle if cb is defined. Only invoke it in re-rendering.
+      if (cb) {
+        cb()
       }
     },
     [active],
@@ -77,9 +77,26 @@ function useUpdateChildrenByActiveIndex(
   )
 }
 
+// Updating the children based in given information. This hook is composed by useActive and useUpdateChildrenByActiveIndex hooks.
+function useUpdateChildren(
+  {
+    activeIndex,
+    children,
+  }: { activeIndex: number, children: ChildrenArray<Element<any>> },
+  cb?: Function,
+) {
+  const [currentActive, setActive] = useActive(activeIndex, cb)
+  const updatedChildren = useUpdateChildrenByActiveIndex(
+    children,
+    currentActive,
+  )
+  return [updatedChildren, { currentActive, setActive }]
+}
+
 export {
   usePrevious,
   useDidUpdateEffect,
   useActive,
   useUpdateChildrenByActiveIndex,
+  useUpdateChildren,
 }
