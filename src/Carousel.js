@@ -21,16 +21,6 @@ const SC = {
   `,
 }
 
-// TODO: Create a Carousel Component.
-// It holds a Panes, handle the content/information, like in Tabs. But one of the difference between this 2 components
-// is that in Carousel, the Panes are automatically switch but in Tabs no. It also has a controls so that user can
-// control what CarouselPane he/she wants to view.
-// Basic features:
-// - It should have panes which hold a specific content.
-// - Automatically switching mode of panes. The switch should be in sequence. Provide a user an option
-//   if he/she wants to have a auto switch mode or disable it.
-// - Provide controls where the user can choose what pane he/she wants to view.
-
 function CarouselIndicators({
   children,
   setActive,
@@ -153,14 +143,7 @@ function Carousel({
       if (isPlaying) {
         // When this Component gets mounted, schedule to update the active state so that it switch to next pane.
         timeout = setTimeout(() => {
-          // Result of increment of active by 1.
-          const incrementActive = currentActive + 1
-          // Get the last element index of slides []
-          const lastElementIndex = slides.length - 1
-          // If incrementActive is greater than the lastElementIndex then active should be assigned to 0 to go back in to first panel. Else, keep going.
-          const resultActive =
-            incrementActive > lastElementIndex ? 0 : incrementActive
-          setActive(resultActive)
+          setActive((currentActive + 1) % slidesLength)
         }, switchTimeout)
       }
       // When the active state is updated via clicking the indicators or using some controls, we need to stop the schedule of updating the state.
