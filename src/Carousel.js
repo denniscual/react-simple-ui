@@ -34,9 +34,11 @@ const SC = {
 function CarouselIndicators({
   children,
   setActive,
+  setPlaying,
 }: {
   children: ChildrenArray<Element<typeof CarouselPane>>,
   setActive: Function,
+  setPlaying: Function,
 }) {
   const carouselIndicators = useMemo(
     () => {
@@ -50,6 +52,8 @@ function CarouselIndicators({
               key={i}
               onClick={() => {
                 setActive(i)
+                // pause the automated switch
+                setPlaying(false)
               }}
             >
               button
@@ -67,22 +71,39 @@ function CarouselIndicators({
 }
 
 function CarouselControls({
+  currentActive,
+  slidesLength,
   setPlaying,
   setActive,
 }: {
+  currentActive: number,
+  slidesLength: number,
   setPlaying: Function,
   setActive: Function,
 }) {
   // TODO: Add definition for this navigator updaters.
-  function prevUpdater(activeIndex: number) {}
-  function nextUpdater(activeIndex: number) {}
+  // If previous button will be invoked, we gonna decrement the value from 1. If the result will become negative, then we gonna set the currentActive number into last element index number.
+  function prevClick() {
+    const newActive = (currentActive - 1 + slidesLength) % slidesLength
+    // change the current active
+    setActive(newActive)
+    // pause the automated switch
+    setPlaying(false)
+  }
+  // If next button will be invoked, we gonna increment the value from 1. If the result will become greater than the last element index number, then we gonna set the currentActive number into first element index number.
+  function nextClick() {
+    const newActive = (currentActive + 1) % slidesLength
+    setActive(newActive)
+    // pause the automated switch
+    setPlaying(false)
+  }
   return (
     <div>
-      <button onClick={() => setActive(prevUpdater)}>Previous</button>
+      <button onClick={prevClick}>Previous</button>
       <button onClick={() => setPlaying(isPlaying => !isPlaying)}>
         Pause/Play
       </button>
-      <button onClick={() => setActive(nextUpdater)}>Next</button>
+      <button onClick={nextClick}>Next</button>
     </div>
   )
 }
@@ -121,8 +142,10 @@ function Carousel({
   // State to define Carousel controls.
   const [isPlaying, setPlaying] = useState(autoSwitch)
   // TODO: I think it is good to encapsulates/group this 2 next statements into 1 hook because they change together.
-  const [active, setActive] = useActive(activeIndex)
-  const updatedChildren = useUpdateChildrenByActiveIndex(children, active)
+  const [currentActive, setActive] = useActive(activeIndex)
+  const slides = useUpdateChildrenByActiveIndex(children, currentActive)
+  // count/length of children
+  const slidesLength = Children.count(children)
   useEffect(
     () => {
       let timeout: any = 0
@@ -131,9 +154,9 @@ function Carousel({
         // When this Component gets mounted, schedule to update the active state so that it switch to next pane.
         timeout = setTimeout(() => {
           // Result of increment of active by 1.
-          const incrementActive = active + 1
-          // Get the last element index of updatedChildren []
-          const lastElementIndex = updatedChildren.length - 1
+          const incrementActive = currentActive + 1
+          // Get the last element index of slides []
+          const lastElementIndex = slides.length - 1
           // If incrementActive is greater than the lastElementIndex then active should be assigned to 0 to go back in to first panel. Else, keep going.
           const resultActive =
             incrementActive > lastElementIndex ? 0 : incrementActive
@@ -145,14 +168,19 @@ function Carousel({
         clearTimeout(timeout)
       }
     },
-    [active, isPlaying],
+    [currentActive, isPlaying],
   )
   return (
     <Fragment>
-      <CarouselControls setPlaying={setPlaying} setActive={setActive} />
-      <RootSC.list>{updatedChildren}</RootSC.list>
-      <CarouselIndicators setActive={setActive}>
-        {updatedChildren}
+      <CarouselControls
+        currentActive={currentActive}
+        slidesLength={slidesLength}
+        setPlaying={setPlaying}
+        setActive={setActive}
+      />
+      <RootSC.list>{slides}</RootSC.list>
+      <CarouselIndicators setActive={setActive} setPlaying={setPlaying}>
+        {slides}
       </CarouselIndicators>
     </Fragment>
   )

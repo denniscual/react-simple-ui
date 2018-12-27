@@ -4,6 +4,7 @@ import React, {
   // $FlowFixMe
   Suspense,
 } from 'react'
+import { compose, curry, toUpper, prop } from 'ramda'
 import Counter from './Counter'
 import Tabs, { TabItem } from './Tabs'
 import Carousel, { CarouselPane } from './Carousel'
