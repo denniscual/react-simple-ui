@@ -61,7 +61,6 @@ function ModalTrigger({ show }: { show: Function }) {
   )
 }
 
-// TODO: We need to add logic in closing the Modal via clicking the WrapperModal. But dont close the Modal if the user clicks into ModalContent.
 function ModalContent({
   isVisible,
   close,
@@ -99,7 +98,9 @@ function ModalContent({
     : null
 }
 
+// TODO: We need to add logic in closing the Modal via clicking the WrapperModal. But dont close the Modal if the user clicks into ModalContent.
 // TODO: We need to add events for Modal like onOpen and onClose events.
+// TODO: Expose props for end-user.
 function Modal() {
   const [isVisible, setVisible] = useState(false)
   function handleModalTriggerClick(event) {
