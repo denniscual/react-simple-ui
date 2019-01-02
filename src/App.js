@@ -101,7 +101,7 @@ function ModalContent({
 // TODO: We need to add logic in closing the Modal via clicking the WrapperModal. But dont close the Modal if the user clicks into ModalContent.
 // TODO: We need to add events for Modal like onOpen and onClose events.
 // TODO: Expose props for end-user.
-// TODO: Check the guidelines - https://assortment.io/posts/accessible-modal-component-react-portals-part-2
+// TODO: Check the guidelines - https://assortment.io/posts/accessible-modal-component-react-portals-part-1
 function Modal() {
   const [isVisible, setVisible] = useState(false)
   function handleModalTriggerClick(event) {
