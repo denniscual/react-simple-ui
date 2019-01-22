@@ -131,6 +131,7 @@ const SC = {
     color: ${getStyle(['elements', 'text'])};
   `,
   title: styled.h3`
+    margin-top: 0;
     color: ${getStyle(['colors', 'accent'])};
   `,
   main: styled.main`
@@ -171,7 +172,7 @@ function App() {
   return (
     <SC.wrapper>
       <SC.header>
-        <SC.title style={{ marginTop: 0 }}>App with themes</SC.title>
+        <SC.title>App with themes</SC.title>
       </SC.header>
       <SC.main>
         <p>Used theme: {themeLabel}</p>
