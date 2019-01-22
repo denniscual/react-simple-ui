@@ -146,22 +146,20 @@ const SC = {
   `,
 }
 
-// TODO: We gonna build an app which has themes. First feature is to have a light and dark theme. Use button toggle between the themes. Default to Dark theme.
 function App() {
   // Toggle theme
-  const [themeLabel, setThemeLabel] = useState('Dark')
   const [isDark, setDark] = useState(true)
+  // Theme label
+  const themeLabel = isDark ? 'Dark' : 'Light'
   // Use to dispatch an action to change the app theme.
   const themeDispatch = useContext(AppThemeContext)
   useEffect(
     () => {
       // Switch to dark theme
       if (isDark) {
-        setThemeLabel('Dark')
         return themeDispatch({ type: themeTypes.DARK })
       }
       // Else, switch to light theme.
-      setThemeLabel('Light')
       return themeDispatch({ type: themeTypes.LIGHT })
     },
     [isDark],
